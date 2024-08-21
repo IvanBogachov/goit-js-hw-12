@@ -5,7 +5,7 @@ import {
   showInfoMessage,
 } from './message-izi.js';
 
-const API_URL = 'https://pixabay.com/api/';
+axios.defaults.baseURL = 'https://pixabay.com/api/';
 const API_KEY = '45418693-8ae3627eda45814ae2d20cf49';
 
 export async function getGalleryData(queryValue, page) {
@@ -20,7 +20,7 @@ export async function getGalleryData(queryValue, page) {
   };
 
   try {
-    const response = await axios.get(API_URL, { params: searchParams });
+    const response = await axios.get('', { params: searchParams });
     return response.data;
   } catch (err) {
     if (err.response) {
