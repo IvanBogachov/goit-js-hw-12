@@ -40,7 +40,13 @@ async function onSubmitForm(event) {
     const galleryData = await getGalleryData(searchQuery, currentPage);
     if (validateGalleryData(galleryData)) {
       renderGallery(galleryData, gallery);
-      loadMoreBtn.classList.remove('is-hidden');
+
+      if (galleryData.totalHits > 15) {
+        showLoadMoreBtn();
+      } else {
+        hideLoadMoreBtn();
+        showInfoMessage(MESSAGES.endOfSearch, MESSAGES_BG_COLORS.orange);
+      }
     }
   } catch (error) {
     showInfoMessage(MESSAGES.exception + error, MESSAGES_BG_COLORS.orange);
@@ -61,8 +67,9 @@ async function onLoadMore() {
       smoothScroll();
     }
 
-    if (galleryData.hits.length < 15) {
-      loadMoreBtn.classList.add('is-hidden');
+    const alreadyLoadedImages = currentPage * 15;
+    if (alreadyLoadedImages >= galleryData.totalHits) {
+      hideLoadMoreBtn();
       showInfoMessage(MESSAGES.endOfSearch, MESSAGES_BG_COLORS.orange);
     }
   } catch (error) {
@@ -95,4 +102,11 @@ function hideLoader() {
   if (loader) {
     loader.classList.add('is-hidden');
   }
+}
+function showLoadMoreBtn() {
+  loadMoreBtn.classList.remove('is-hidden');
+}
+
+function hideLoadMoreBtn() {
+  loadMoreBtn.classList.add('is-hidden');
 }
